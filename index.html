@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanbir Hasan Taz | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#8b5cf6',
+                        accent: '#f43f5e',
+                        dark: '#0f172a',
+                        darker: '#020617',
+                    },
+                    animation: {
+                        'gradient-x': 'gradient-x 15s ease infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        'gradient-x': {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            },
+                        },
+                        'float': {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            background: rgba(30, 41, 59, 0.6);
+            border-color: rgba(99, 102, 241, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .skill-bar {
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+        
+        .skill-bar.active {
+            width: var(--target-width);
+        }
+        
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: float 10s infinite;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, #6366f1, #8b5cf6, transparent);
+        }
+        
+        @media (max-width: 768px) {
+            .timeline-line {
+                left: 20px;
+            }
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .cursor-glow {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-darker text-gray-100 font-sans overflow-x-hidden selection:bg-primary selection:text-white">
+
+    <!-- Cursor Glow Effect -->
+    <div id="cursor-glow" class="cursor-glow opacity-0"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-display font-bold text-xl">
+                        T
+                    </div>
+                    <span class="font-display font-bold text-xl tracking-tight">Tanbir<span class="text-primary">.</span></span>
+                </div>
+                
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-sm font-medium hover:text-primary transition-colors">Home</a>
+                    <a href="#about" class="nav-link text-sm font-medium hover:text-primary transition-colors">About</a>
+                    <a href="#education" class="nav-link text-sm font-medium hover:text-primary transition-colors">Education</a>
+                    <a href="#certifications" class="nav-link text-sm font-medium hover:text-primary transition-colors">Certifications</a>
+                    <a href="#skills" class="nav-link text-sm font-medium hover:text-primary transition-colors">Skills</a>
+                    <a href="#contact" class="nav-link text-sm font-medium hover:text-primary transition-colors">Contact</a>
+                </div>
+
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden glass border-t border-gray-800">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#home" class="block px-3 py-2 text-base font-medium hover:text-primary">Home</a>
+                <a href="#about" class="block px-3 py-2 text-base font-medium hover:text-primary">About</a>
+                <a href="#education" class="block px-3 py-2 text-base font-medium hover:text-primary">Education</a>
+                <a href="#certifications" class="block px-3 py-2 text-base font-medium hover:text-primary">Certifications</a>
+                <a href="#skills" class="block px-3 py-2 text-base font-medium hover:text-primary">Skills</a>
+                <a href="#contact" class="block px-3 py-2 text-base font-medium hover:text-primary">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Animated Background Blobs -->
+        <div class="blob bg-primary w-96 h-96 rounded-full top-20 -left-20"></div>
+        <div class="blob bg-secondary w-80 h-80 rounded-full bottom-20 -right-20 animation-delay-2000"></div>
+        <div class="blob bg-accent w-64 h-64 rounded-full top-1/2 left-1/2 animation-delay-4000"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal active">
+                <p class="text-primary font-medium mb-4 tracking-widest uppercase text-sm">Welcome to my portfolio</p>
+                <h1 class="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+                    Hi, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary via-secondary to-accent animate-gradient-x">Tanbir Hasan Taz</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-400 mb-8 max-w-2xl mx-auto font-light">
+                    Creative Developer & Designer crafting digital experiences that inspire and innovate.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                    <a href="#contact" class="px-8 py-4 bg-gradient-to-r from-primary to-secondary rounded-full font-medium hover:shadow-lg hover:shadow-primary/25 transition-all transform hover:scale-105 flex items-center gap-2">
+                        <span>Get In Touch</span>
+                        <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                    </a>
+                    <a href="#about" class="px-8 py-4 glass rounded-full font-medium hover:bg-white/10 transition-all flex items-center gap-2">
+                        <span>Learn More</span>
+                        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                    </a>
+                </div>
+
+                <div class="mt-16 flex justify-center gap-6">
+                    <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors group">
+                        <i data-lucide="github" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors group">
+                        <i data-lucide="linkedin" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors group">
+                        <i data-lucide="twitter" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
+                    </a>
+                    <a href="#" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-primary/20 transition-colors group">
+                        <i data-lucide="mail" class="w-5 h-5 group-hover:text-primary transition-colors"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <i data-lucide="chevron-down" class="w-6 h-6 text-gray-500"></i>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <div class="relative">
+                        <div class="absolute -inset-4 bg-gradient-to-r from-primary to-secondary rounded-2xl opacity-30 blur-xl"></div>
+                        <div class="relative glass-card rounded-2xl p-8 aspect-square flex items-center justify-center overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                            <div class="text-center z-10">
+                                <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-primary to-secondary p-1">
+                                    <div class="w-full h-full rounded-full bg-darker flex items-center justify-center">
+                                        <span class="text-4xl font-display font-bold">T</span>
+                                    </div>
+                                </div>
+                                <p class="text-gray-400 italic">"Design is not just what it looks like, it's how it works."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal">
+                    <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                        About <span class="text-primary">Me</span>
+                    </h2>
+                    <p class="text-gray-400 text-lg mb-6 leading-relaxed">
+                        I'm a passionate developer and designer with a keen eye for detail and a drive for creating exceptional digital experiences. With expertise in modern web technologies and design principles, I bring ideas to life through clean code and intuitive interfaces.
+                    </p>
+                    <p class="text-gray-400 text-lg mb-8 leading-relaxed">
+                        My approach combines technical excellence with creative thinking, ensuring every project not only functions flawlessly but also delivers a memorable user experience.
+                    </p>
+                    
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="glass-card rounded-xl p-4">
+                            <h4 class="font-display font-bold text-2xl text-primary mb-1">3+</h4>
+                            <p class="text-sm text-gray-400">Years Experience</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-4">
+                            <h4 class="font-display font-bold text-2xl text-secondary mb-1">50+</h4>
+                            <p class="text-sm text-gray-400">Projects Completed</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-4">
+                            <h4 class="font-display font-bold text-2xl text-accent mb-1">20+</h4>
+                            <p class="text-sm text-gray-400">Happy Clients</p>
+                        </div>
+                        <div class="glass-card rounded-xl p-4">
+                            <h4 class="font-display font-bold text-2xl text-primary mb-1">15+</h4>
+                            <p class="text-sm text-gray-400">Certifications</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-24 relative bg-dark/50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+                    Educational <span class="text-gradient">Background</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">My academic journey and qualifications that shaped my professional expertise.</p>
+            </div>
+
+            <div class="relative">
+                <div class="timeline-line"></div>
+                
+                <div class="space-y-12">
+                    <!-- Education Item 1 -->
+                    <div class="relative reveal">
+                        <div class="md:flex items-center justify-between">
+                            <div class="md:w-5/12 md:text-right pr-8 hidden md:block">
+                                <span class="text-primary font-medium text-sm tracking-wider uppercase">2020 - 2024</span>
+                                <h3 class="font-display text-xl font-bold mt-2">Bachelor of Science</h3>
+                                <p class="text-gray-400 mt-1">Computer Science & Engineering</p>
+                            </div>
+                            
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-darker z-10 hidden md:block"></div>
+                            
+                            <div class="md:w-5/12 pl-8 md:pl-8">
+                                <div class="glass-card rounded-2xl p-6 md:hidden mb-4">
+                                    <span class="text-primary font-medium text-sm tracking-wider uppercase">2020 - 2024</span>
+                                    <h3 class="font-display text-xl font-bold mt-2">Bachelor of Science</h3>
+                                    <p class="text-gray-400 mt-1">Computer Science & Engineering</p>
+                                </div>
+                                <div class="glass-card rounded-2xl p-6 hidden md:block">
+                                    <p class="text-gray-300">Major in Software Engineering with focus on Web Technologies and Artificial Intelligence. Graduated with honors.</p>
+                                    <div class="mt-4 flex gap-2">
+                                        <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs">Dean's List</span>
+                                        <span class="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs">GPA: 3.8/4.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mobile Content -->
+                        <div class="glass-card rounded-2xl p-6 md:hidden mt-4 ml-8">
+                            <p class="text-gray-300">Major in Software Engineering with focus on Web Technologies and Artificial Intelligence. Graduated with honors.</p>
+                            <div class="mt-4 flex gap-2 flex-wrap">
+                                <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs">Dean's List</span>
+                                <span class="px-3 py-1 rounded-full bg-secondary/10 text-secondary text-xs">GPA: 3.8/4.0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Education Item 2 -->
+                    <div class="relative reveal">
+                        <div class="md:flex items-center justify-between flex-row-reverse">
+                            <div class="md:w-5/12 md:text-left pl-8 hidden md:block">
+                                <span class="text-secondary font-medium text-sm tracking-wider uppercase">2018 - 2020</span>
+                                <h3 class="font-display text-xl font-bold mt-2">Higher Secondary</h3>
+                                <p class="text-gray-400 mt-1">Science Group</p>
+                            </div>
+                            
+                            <div class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 rounded-full bg-secondary border-4 border-darker z-10 hidden md:block"></div>
+                            
+                            <div class="md:w-5/12 md:pr-8 md:text-right">
+                                <div class="glass-card rounded-2xl p-6 md:hidden mb-4">
+                                    <span class="text-secondary font-medium text-sm tracking-wider uppercase">2018 - 2020</span>
+                                    <h3 class="font-display text-xl font-bold mt-2">Higher Secondary</h3>
+                                    <p class="text-gray-400 mt-1">Science Group</p>
+                                </div>
+                                <div class="glass-card rounded-2xl p-6 hidden md:block">
+                                    <p class="text-gray-300">Completed with distinction in Mathematics, Physics, and Chemistry. Active member of the Science Club.</p>
+                                    <div class="mt-4 flex justify-end gap-2">
+                                        <span class="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs">Golden GPA 5</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mobile Content -->
+                        <div class="glass-card rounded-2xl p-6 md:hidden mt-4 ml-8">
+                            <p class="text-gray-300">Completed with distinction in Mathematics, Physics, and Chemistry. Active member of the Science Club.</p>
+                            <div class="mt-4 flex gap-2 flex-wrap">
+                                <span class="px-3 py-1 rounded-full bg-accent/10 text-accent text-xs">Golden GPA 5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+                    Professional <span class="text-gradient">Certifications</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Continuous learning and professional development through industry-recognized certifications.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cert Card 1 -->
+                <div class="glass-card rounded-2xl p-6 reveal group cursor-pointer" onclick="toggleCert(this)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                            <i data-lucide="award" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">2024</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">AWS Solutions Architect</h3>
+                    <p class="text-gray-400 text-sm mb-4">Amazon Web Services</p>
+                    <div class="h-0 overflow-hidden transition-all duration-300 cert-details">
+                        <p class="text-gray-300 text-sm pt-4 border-t border-gray-700">Professional level certification validating expertise in designing distributed systems on AWS infrastructure.</p>
+                        <div class="mt-3 flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-primary/10 text-primary">Cloud</span>
+                            <span class="text-xs px-2 py-1 rounded bg-primary/10 text-primary">Infrastructure</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-primary text-sm font-medium">
+                        <span class="mr-2">View Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 cert-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Cert Card 2 -->
+                <div class="glass-card rounded-2xl p-6 reveal group cursor-pointer" onclick="toggleCert(this)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                            <i data-lucide="code-2" class="w-6 h-6 text-secondary"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">2023</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">Meta Frontend Developer</h3>
+                    <p class="text-gray-400 text-sm mb-4">Meta (Facebook)</p>
+                    <div class="h-0 overflow-hidden transition-all duration-300 cert-details">
+                        <p class="text-gray-300 text-sm pt-4 border-t border-gray-700">Comprehensive certification covering React, JavaScript ES6+, and modern frontend development practices.</p>
+                        <div class="mt-3 flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-secondary/10 text-secondary">React</span>
+                            <span class="text-xs px-2 py-1 rounded bg-secondary/10 text-secondary">Frontend</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-secondary text-sm font-medium">
+                        <span class="mr-2">View Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 cert-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Cert Card 3 -->
+                <div class="glass-card rounded-2xl p-6 reveal group cursor-pointer" onclick="toggleCert(this)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                            <i data-lucide="database" class="w-6 h-6 text-accent"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">2023</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">Google Data Analytics</h3>
+                    <p class="text-gray-400 text-sm mb-4">Google Career Certificates</p>
+                    <div class="h-0 overflow-hidden transition-all duration-300 cert-details">
+                        <p class="text-gray-300 text-sm pt-4 border-t border-gray-700">Professional certificate in data analysis using SQL, R, Tableau, and spreadsheet tools.</p>
+                        <div class="mt-3 flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-accent/10 text-accent">Data</span>
+                            <span class="text-xs px-2 py-1 rounded bg-accent/10 text-accent">Analytics</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-accent text-sm font-medium">
+                        <span class="mr-2">View Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 cert-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Cert Card 4 -->
+                <div class="glass-card rounded-2xl p-6 reveal group cursor-pointer" onclick="toggleCert(this)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                            <i data-lucide="shield" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">2022</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">CompTIA Security+</h3>
+                    <p class="text-gray-400 text-sm mb-4">CompTIA</p>
+                    <div class="h-0 overflow-hidden transition-all duration-300 cert-details">
+                        <p class="text-gray-300 text-sm pt-4 border-t border-gray-700">Global certification validating baseline cybersecurity skills and best practices.</p>
+                        <div class="mt-3 flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-primary/10 text-primary">Security</span>
+                            <span class="text-xs px-2 py-1 rounded bg-primary/10 text-primary">Network</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-primary text-sm font-medium">
+                        <span class="mr-2">View Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 cert-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Cert Card 5 -->
+                <div class="glass-card rounded-2xl p-6 reveal group cursor-pointer" onclick="toggleCert(this)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-secondary/10 flex items-center justify-center group-hover:bg-secondary/20 transition-colors">
+                            <i data-lucide="figma" class="w-6 h-6 text-secondary"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">2022</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">UI/UX Design Specialization</h3>
+                    <p class="text-gray-400 text-sm mb-4">California Institute of Arts</p>
+                    <div class="h-0 overflow-hidden transition-all duration-300 cert-details">
+                        <p class="text-gray-300 text-sm pt-4 border-t border-gray-700">Comprehensive design thinking, wireframing, prototyping, and user research methodologies.</p>
+                        <div class="mt-3 flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-secondary/10 text-secondary">Design</span>
+                            <span class="text-xs px-2 py-1 rounded bg-secondary/10 text-secondary">UX</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-secondary text-sm font-medium">
+                        <span class="mr-2">View Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 cert-icon"></i>
+                    </div>
+                </div>
+
+                <!-- Cert Card 6 -->
+                <div class="glass-card rounded-2xl p-6 reveal group cursor-pointer" onclick="toggleCert(this)">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center group-hover:bg-accent/20 transition-colors">
+                            <i data-lucide="terminal" class="w-6 h-6 text-accent"></i>
+                        </div>
+                        <span class="text-xs text-gray-500 font-medium">2021</span>
+                    </div>
+                    <h3 class="font-display font-bold text-lg mb-2">Python for Everybody</h3>
+                    <p class="text-gray-400 text-sm mb-4">University of Michigan</p>
+                    <div class="h-0 overflow-hidden transition-all duration-300 cert-details">
+                        <p class="text-gray-300 text-sm pt-4 border-t border-gray-700">Specialization covering Python data structures, web scraping, databases, and data visualization.</p>
+                        <div class="mt-3 flex gap-2">
+                            <span class="text-xs px-2 py-1 rounded bg-accent/10 text-accent">Python</span>
+                            <span class="text-xs px-2 py-1 rounded bg-accent/10 text-accent">Programming</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 flex items-center text-accent text-sm font-medium">
+                        <span class="mr-2">View Details</span>
+                        <i data-lucide="chevron-down" class="w-4 h-4 transition-transform duration-300 cert-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-24 relative bg-dark/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+                    Technical <span class="text-gradient">Skills</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Technologies and tools I use to bring ideas to life.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Technical Skills -->
+                <div class="reveal">
+                    <h3 class="font-display text-2xl font-bold mb-8 flex items-center gap-2">
+                        <i data-lucide="code" class="w-6 h-6 text-primary"></i>
+                        Development
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">JavaScript / TypeScript</span>
+                                <span class="text-primary">95%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full skill-bar" style="--target-width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">React / Next.js</span>
+                                <span class="text-primary">90%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full skill-bar" style="--target-width: 90%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Node.js / Express</span>
+                                <span class="text-primary">85%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full skill-bar" style="--target-width: 85%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Python / Django</span>
+                                <span class="text-primary">80%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full skill-bar" style="--target-width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Design & Tools -->
+                <div class="reveal">
+                    <h3 class="font-display text-2xl font-bold mb-8 flex items-center gap-2">
+                        <i data-lucide="palette" class="w-6 h-6 text-secondary"></i>
+                        Design & Tools
+                    </h3>
+                    
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Figma / UI Design</span>
+                                <span class="text-secondary">92%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full skill-bar" style="--target-width: 92%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Tailwind CSS</span>
+                                <span class="text-secondary">95%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full skill-bar" style="--target-width: 95%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">AWS / Cloud Services</span>
+                                <span class="text-secondary">78%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full skill-bar" style="--target-width: 78%"></div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="font-medium">Git / DevOps</span>
+                                <span class="text-secondary">88%</span>
+                            </div>
+                            <div class="h-2 bg-gray-700 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full skill-bar" style="--target-width: 88%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tech Stack Tags -->
+            <div class="mt-16 reveal">
+                <h3 class="font-display text-xl font-bold mb-6 text-center">Technologies I Work With</h3>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">React</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">Next.js</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">TypeScript</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">Node.js</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">Python</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">PostgreSQL</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">MongoDB</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">Docker</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">AWS</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">Figma</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">GraphQL</span>
+                    <span class="px-4 py-2 glass rounded-full text-sm hover:bg-primary/20 transition-colors cursor-default">Redis</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">
+                    Let's Work <span class="text-gradient">Together</span>
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Have a project in mind? Let's create something amazing together.</p>
+            </div>
+
+            <div class="glass-card rounded-3xl p-8 md:p-12 reveal">
+                <form class="space-y-6" onsubmit="event.preventDefault(); showNotification('Message sent successfully!');">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium mb-2 text-gray-300">Name</label>
+                            <input type="text" class="w-full px-4 py-3 rounded-xl bg-dark/50 border border-gray-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Your name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2 text-gray-300">Email</label>
+                            <input type="email" class="w-full px-4 py-3 rounded-xl bg-dark/50 border border-gray-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="your@email.com">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-gray-300">Subject</label>
+                        <input type="text" class="w-full px-4 py-3 rounded-xl bg-dark/50 border border-gray-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Project inquiry">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2 text-gray-300">Message</label>
+                        <textarea rows="5" class="w-full px-4 py-3 rounded-xl bg-dark/50 border border-gray-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all resize-none" placeholder="Tell me about your project..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary to-secondary rounded-xl font-medium hover:shadow-lg hover:shadow-primary/25 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-2">
+                        <span>Send Message</span>
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                    </button>
+                </form>
+
+                <div class="mt-12 pt-8 border-t border-gray-700 grid md:grid-cols-3 gap-6 text-center">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                            <i data-lucide="mail" class="w-5 h-5 text-primary"></i>
+                        </div>
+                        <span class="text-sm text-gray-400">tanbir.taz@email.com</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-secondary/10 flex items-center justify-center">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-secondary"></i>
+                        </div>
+                        <span class="text-sm text-gray-400">Dhaka, Bangladesh</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                            <i data-lucide="phone" class="w-5 h-5 text-accent"></i>
+                        </div>
+                        <span class="text-sm text-gray-400">+880 1XXX-XXXXXX</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-display font-bold text-sm">
+                    T
+                </div>
+                <span class="font-display font-bold">Tanbir Hasan Taz</span>
+            </div>
+            
+            <p class="text-gray-500 text-sm">© 2024 All rights reserved. Designed & Built with passion.</p>
+            
+            <div class="flex gap-4">
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                    <i data-lucide="linkedin" class="w-5 h-5"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-primary transition-colors">
+                    <i data-lucide="twitter" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="fixed bottom-4 right-4 glass px-6 py-4 rounded-xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-3">
+        <i data-lucide="check-circle" class="w-5 h-5 text-green-400"></i>
+        <span id="notification-text">Success!</span>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Certification Toggle
+        function toggleCert(element) {
+            const details = element.querySelector('.cert-details');
+            const icon = element.querySelector('.cert-icon');
+            
+            if (details.style.height === '0px' || !details.style.height) {
+                details.style.height = details.scrollHeight + 'px';
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                details.style.height = '0px';
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Notification
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const text = document.getElementById('notification-text');
+            text.textContent = message;
+            
+            notification.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                notification.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    // Animate skill bars if in skills section
+                    if (entry.target.closest('#skills')) {
+                        const skillBars = entry.target.querySelectorAll('.skill-bar');
+                        skillBars.forEach(bar => {
+                            setTimeout(() => {
+                                bar.classList.add('active');
+                            }, 200);
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+        // Cursor Glow Effect
+        const cursorGlow = document.getElementById('cursor-glow');
+        let mouseX = 0, mouseY = 0;
+        let currentX = 0, currentY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            cursorGlow.style.opacity = '1';
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursorGlow.style.opacity = '0';
+        });
+
+        function animateCursor() {
+            currentX += (mouseX - currentX) * 0.1;
+            currentY += (mouseY - currentY) * 0.1;
+            
+            cursorGlow.style.left = currentX + 'px';
+            cursorGlow.style.top = currentY + 'px';
+            
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Navbar Scroll Effect
+        let lastScroll = 0;
+        const navbar = document.getElementById('navbar');
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                navbar.classList.add('shadow-lg', 'shadow-primary/5');
+            } else {
+                navbar.classList.remove('shadow-lg', 'shadow-primary/5');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
